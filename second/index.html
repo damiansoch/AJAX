@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="image_container">
+      <p id="allCds"></p>
+    </div>
+    <button onclick="getContent()">Get Best Hits</button>
+    <script>
+      // step 1 - set up XML HTTPRequest() object
+
+      var ajax = new XMLHttpRequest();
+
+      // step 2 - Call on the AJAX Open() - prepare to open AJAX request
+
+      ajax.open("GET", "cd_catalog.xml"); //http Methood , where is it from
+
+      // step 3 - Define the AJAX Callback
+
+      ajax.onreadystatechange = function () {
+        if (ajax.readyState == 4) {
+          var xmlDoc = this.responseXML;
+          var titles = xmlDoc.getElementsByTagName("TITLE");
+          var artists = xmlDoc.getElementsByTagName("ARTIST");
+          var countries = xmlDoc.getElementsByTagName("COUNTRY");
+          var companies = xmlDoc.getElementsByTagName("COMPANY");
+          var prices = xmlDoc.getElementsByTagName("PRICE");
+          var years = xmlDoc.getElementsByTagName("YEAR");
+          console.log(titles);
+          let text = "";
+
+          for (i = 0; i < titles.length; i++) {
+            text =
+              text +
+              `The song nr ${i + 1} is ${titles[i].innerHTML} by ${
+                artists[i].textContent
+              } from ${countries[i].textContent}. Released by ${
+                companies[i].textContent
+              } in ${years[i].textContent}. The price is € ${
+                prices[i].textContent
+              } <br>`;
+          }
+          document.getElementById("allCds").innerHTML = text;
+        }
+      };
+
+      // step 4 - Call on the AJAX Send() (send the AJAX request data)
+
+      function getContent() {
+        ajax.send();
+      }
+    </script>
+  </body>
+</html>
